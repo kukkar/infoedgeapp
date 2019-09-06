@@ -13,10 +13,8 @@ func ReadAndProcessFromInput(input io.Reader) {
 	scanner := bufio.NewScanner(input)
 	for scanner.Scan() {
 		command := strings.ToLower(scanner.Text())
-		err := processCommand(command)
-		if err != nil {
-			fmt.Printf("Error Occured :- %s \n", err.Error())
-		}
+		processCommand(command)
+		
 	}
 
 	if err := scanner.Err(); err != nil {

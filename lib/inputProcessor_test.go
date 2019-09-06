@@ -1,52 +1,70 @@
 package lib
 
-// func TestProcessCommandWithWrongCommand(t *testing.T) {
-// 	// expected := UNSUPPORTED_COMMAND
-// 	// actual := processCommand("test").Error()
-// 	// if actual != expected {
-// 	// 	t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, actual)
-// 	// }
-// }
+import "testing"
 
-// func TestProcessCommandWithWrongCommandArguments(t *testing.T) {
-// 	// expected := UNSUPPORTED_COMMAND_ARGUMENTS
-// 	// actual := processCommand("park").Error()
-// 	// if actual != expected {
-// 	// 	t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, actual)
-// 	// }
-// }
 
-// func TestProcessCommandWithWithRightCommand(t *testing.T) {
-// 	// expected := ""
-// 	// actual := processCommand("create_parking_lot 1")
-// 	// if actual != nil {
-// 	// 	t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, actual.Error())
-// 	// }
-// }
+const (
+	USER           = "test"
+	EMAIL = "test@gmail.com"
+	PASS = "test"
+	INPUT = "first test message"
+)
+func TestProcessCommandWithWrongCommand(t *testing.T) {
+	expected := UNSUPPORTED_COMMAND
+	actual := processCommand("test").Error()
+	if actual != expected {
+		t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, actual)
+	}
+}
 
-// func TestProcessCommandWithRightCommand2(t *testing.T) {
-// 	// expected := parkingLot.NOT_FOUND_ERROR
-// 	// actual := processCommand("slot_numbers_for_cars_with_colour 1").Error()
-// 	// if actual != expected {
-// 	// 	t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, actual)
-// 	// }
-// }
+func TestProcessCommandWithWrongCommandArguments(t *testing.T) {
+	expected := argumentsErrors["loginfirst"].Error()
+	actual := processCommand("createjournal").Error()
+	if actual != expected {
+		t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, actual)
+	}
+}
 
-// func TestProcessCommandWithRightCommand3(t *testing.T) {
-// 	// expected := ""
-// 	// actual := processCommand("park 1 red")
-// 	// if actual != nil {
-// 	// 	t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, actual.Error())
-// 	// }
-// }
+func TestProcessCommandWithWithRightCommand(t *testing.T) {
+	expected := ""
+	actual := processCommand("signup " + USER+ " " + EMAIL+ " " +PASS)
+	if actual != nil {
+		t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, actual.Error())
+	}
+}
 
-// func TestProcessCommandWithRightCommand4(t *testing.T) {
-// 	// expected := parkingLot.NOT_FOUND_ERROR
-// 	// actual := processCommand("leave 2").Error()
-// 	// if actual != expected {
-// 	// 	t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, actual)
-// 	// }
-// }
+func TestProcessCommandWithRightCommand2(t *testing.T) {
+	expected := ""
+	actual := processCommand("login " + EMAIL + " " + PASS)
+	if actual != nil {
+		t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, actual)
+	}
+}
+
+func TestProcessCommandWithRightCommand3(t *testing.T) {
+	expected := ""
+	actual := processCommand("listjournal")
+	if actual != nil {
+		t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, actual.Error())
+	}
+}
+
+func TestProcessCommandWithRightCommand4(t *testing.T) {
+	expected := ""
+	actual := processCommand("createjournal "+ INPUT)
+	if actual != nil {
+		t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, actual)
+	}
+}
+
+
+func TestProcessCommandWithRightCommand5(t *testing.T) {
+	expected := ""
+	actual := processCommand("removeuser "+ EMAIL)
+	if actual != nil {
+		t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, actual)
+	}
+}
 
 // func TestProcessCommandWithRightCommand5(t *testing.T) {
 // 	old := os.Stdout // keep backup of the real stdout
