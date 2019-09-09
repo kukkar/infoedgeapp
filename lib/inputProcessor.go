@@ -17,7 +17,7 @@ var allowedCommands = map[string]int{
 	"signup":        3,
 	"listjournal":   0,
 	"createjournal": 99,
-	"removeuser" : 1,
+	"removeuser":    1,
 }
 
 var argumentsErrors = map[string]error{
@@ -25,7 +25,7 @@ var argumentsErrors = map[string]error{
 	"signup":        fmt.Errorf("atlease id password and email required"),
 	"listjournal":   nil,
 	"createjournal": fmt.Errorf("Make an entry with something please"),
-	"loginfirst" : fmt.Errorf("Need to Login first"),
+	"loginfirst":    fmt.Errorf("Need to Login first"),
 }
 
 const (
@@ -39,7 +39,7 @@ const (
 func processCommand(command string) error {
 	commandDelimited := strings.Split(command, " ")
 	lengthOfCommand := len(commandDelimited)
-	
+
 	var err error
 	arguments := []string{}
 	if lengthOfCommand < 1 {
@@ -56,7 +56,7 @@ func processCommand(command string) error {
 	// check if command is one of the allowed commands
 	if numberOfArguments, exists := allowedCommands[command]; exists {
 
-		if len(arguments) != numberOfArguments && numberOfArguments !=99 {
+		if len(arguments) != numberOfArguments && numberOfArguments != 99 {
 			fmt.Println(argumentsErrors[command].Error())
 			return argumentsErrors[command]
 		}
@@ -66,8 +66,8 @@ func processCommand(command string) error {
 		case "login":
 			var err error
 			sessionId, err = user.Login(user.User{
-				Id : arguments[0],
-				Password :arguments[1],
+				Id:       arguments[0],
+				Password: arguments[1],
 			})
 			if err != nil {
 				return err
@@ -75,11 +75,11 @@ func processCommand(command string) error {
 			fmt.Println("Login Successfully")
 			return nil
 		case "signup":
-		 err :=	user.SignUp(user.UserSignUP{
-				Name : arguments[0],
-				Password : arguments[2],
-				Email : arguments[1],
-			 })
+			err := user.SignUp(user.UserSignUP{
+				Name:     arguments[0],
+				Password: arguments[2],
+				Email:    arguments[1],
+			})
 			if err != nil {
 				return err
 			}
@@ -98,8 +98,8 @@ func processCommand(command string) error {
 			if err != nil {
 				return err
 			}
-			for index,eachEntry := range enteries {
-				fmt.Printf("%d %s %s \n",index,eachEntry.Time,eachEntry.ToRemeber)
+			for index, eachEntry := range enteries {
+				fmt.Printf("%d %s %s \n", index, eachEntry.Time, eachEntry.ToRemeber)
 			}
 			return nil
 		case "createjournal":
@@ -111,15 +111,15 @@ func processCommand(command string) error {
 				}
 			}
 			var input string
-			for _,eachData := range arguments{
-				input = input+" " + eachData
+			for _, eachData := range arguments {
+				input = input + " " + eachData
 			}
 			err = jr.InputEntry(input)
 			if err != nil {
 				return err
 			}
 			return nil
-		case "removeuser" : 
+		case "removeuser":
 			return user.RemoveUser(arguments[0])
 		}
 	} else {

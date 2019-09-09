@@ -47,9 +47,8 @@ func SignUp(su UserSignUP) error {
 
 	fileName := helpers.GetFileName(su.Email)
 	d := journal.File{
-		Pass:  su.Password,
-		Count: 0,
-		Data:  nil,
+		Pass: su.Password,
+		Data: nil,
 	}
 
 	err := helpers.CreateFile(fileName)
@@ -68,10 +67,10 @@ func SignUp(su UserSignUP) error {
 	return nil
 }
 
-func RemoveUser(email string)error {
-	
-	fn :=  helpers.GetFileName(email)
-	err :=  helpers.DeleteFile(fn)
+func RemoveUser(email string) error {
+
+	fn := helpers.GetFileName(email)
+	err := helpers.DeleteFile(fn)
 	if err != nil {
 		return err
 	}
