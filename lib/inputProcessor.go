@@ -61,66 +61,79 @@ func processCommand(command string) error {
 			return argumentsErrors[command]
 		}
 
+		w := &ErrWrapper{}
+
+
 		// after validation of number of arguments per command, perform the necessary command
 		switch command {
 		case "login":
-			var err error
-			sessionId, err = user.Login(user.User{
-				Id:       arguments[0],
-				Password: arguments[1],
+			w.do(func() error {
+				var err error
+				sessionId, err = user.Login(user.User{
+					Id:       arguments[0],
+					Password: arguments[1],
+				})
+				if err != nil {
+					return err
+				}
+				fmt.Println("Login Successfully")
+				return nil
 			})
-			if err != nil {
-				return err
-			}
-			fmt.Println("Login Successfully")
-			return nil
 		case "signup":
-			err := user.SignUp(user.UserSignUP{
-				Name:     arguments[0],
-				Password: arguments[2],
-				Email:    arguments[1],
-			})
-			if err != nil {
-				return err
-			}
-			fmt.Println("Signup successfully")
-			return nil
-
+			return w.do(func () error {
+				err := user.SignUp(user.UserSignUP{
+					Name:     arguments[0],
+					Password: arguments[2],
+					Email:    arguments[1],
+				})
+				if err != nil {
+					return err
+				}
+				fmt.Println("Signup successfully")
+				return nil
+			})		
 		case "listjournal":
-			if jr == nil {
-				if sessionId != nil {
-					jr, err = journal.GetInstace(*(sessionId))
-				} else {
-					return argumentsErrors["loginfirst"]
+			return w.do(func() error {
+				if jr == nil {
+					if sessionId != nil {
+						jr, err = journal.GetInstace(*(sessionId))
+					} else {
+						return argumentsErrors["loginfirst"]
+					}
 				}
-			}
-			enteries, err := jr.ListEntries()
-			if err != nil {
-				return err
-			}
-			for index, eachEntry := range enteries {
-				fmt.Printf("%d %s %s \n", index, eachEntry.Time, eachEntry.ToRemeber)
-			}
-			return nil
+				enteries, err := jr.ListEntries()
+				if err != nil {
+					return err
+				}
+				for index, eachEntry := range enteries {
+					fmt.Printf("%d %s %s \n", index, eachEntry.Time, eachEntry.ToRemeber)
+				}
+				return nil
+			})
 		case "createjournal":
-			if jr == nil {
-				if sessionId != nil {
-					jr, err = journal.GetInstace(*(sessionId))
-				} else {
-					return argumentsErrors["loginfirst"]
+			return w.do(func() error {
+				if jr == nil {
+					if sessionId != nil {
+						jr, err = journal.GetInstace(*(sessionId))
+					} else {
+						return argumentsErrors["loginfirst"]
+					}
 				}
-			}
-			var input string
-			for _, eachData := range arguments {
-				input = input + " " + eachData
-			}
-			err = jr.InputEntry(input)
-			if err != nil {
-				return err
-			}
-			return nil
+				var input string
+				for _, eachData := range arguments {
+					input = input + " " + eachData
+				}
+				err = jr.InputEntry(input)
+				if err != nil {
+					return err
+				}
+				return nil
+			})
+
 		case "removeuser":
-			return user.RemoveUser(arguments[0])
+			return w.do(func ()error{
+				return user.RemoveUser(arguments[0])
+			})
 		}
 	} else {
 		err := errors.New(UNSUPPORTED_COMMAND)

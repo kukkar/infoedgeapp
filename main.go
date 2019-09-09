@@ -13,7 +13,7 @@ func main() {
 		fileName := argsWithoutProg[0]
 		lib.ReadAndProcessFromFile(fileName)
 	} else {
-		fmt.Println("\n INTERACTIVE COMMANDS :- \n Login <User> <password> \n SignUp <Id> <email> <password>")
+		fmt.Println("\n INTERACTIVE COMMANDS :- \n LOGIN <User> <password> \n SIGNUP <Id> <email> <password> \n LISTJOURNAL \n CREATEJOURNAL <message>")
 		//We need to make it interactive session now
 		lib.ReadAndProcessStdIn()
 	}
